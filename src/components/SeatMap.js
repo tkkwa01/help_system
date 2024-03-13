@@ -6,7 +6,7 @@ const SeatMap = () => {
 
     useEffect(() => {
         // WebSocket接続を開始
-        const webSocket = new WebSocket('ws://localhost:8080');
+        const webSocket = new WebSocket(`ws://${location.hostname}:8080`);
         setWs(webSocket);
 
         webSocket.onmessage = (event) => {
@@ -16,7 +16,6 @@ const SeatMap = () => {
                 // JSON形式の場合、席のハイライト状態を更新
                 updateSeatHighlight(message.seatNumber);
             } catch (error) {
-                // 受信したメッセージがJSON形式でない場合は、ここで処理される
                 console.error('Received message is not valid JSON:', error);
             }
         };

@@ -1,9 +1,11 @@
 const WebSocket = require('ws');
+const wss = new WebSocket.Server({ port: 8080, host: '0.0.0.0' });
 
-const wss = new WebSocket.Server({ port: 8080 });
+wss.on('connection', function connection(ws, req) {
+    const ip = req.socket.remoteAddress;
+    console.log('A new client connected from:', ip);
 
-wss.on('connection', function connection(ws) {
-    console.log('A new client connected.');
+    // ここでIPアドレスの下2桁を計算し、10を引くなどの処理を行う
 
     ws.on('message', function incoming(data) {
         console.log('Received: %s', data);
@@ -22,9 +24,6 @@ wss.on('connection', function connection(ws) {
             console.error('Error parsing message', e);
         }
     });
-
-    // 接続されたクライアントに歓迎メッセージを送信
-    // ws.send('Welcome to the WebSocket server!');
 });
 
-console.log('WebSocket server is running on ws://localhost:8080');
+console.log(`WebSocket server is running on ws://${wss.options.host}:${wss.options.port}`);

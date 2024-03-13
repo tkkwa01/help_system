@@ -11,7 +11,7 @@ export default function HelpRequestForm() {
 
     useEffect(() => {
         // WebSocketクライアントの初期化
-        const webSocket = new WebSocket('ws://localhost:8080');
+        const webSocket = new WebSocket(`ws://${location.hostname}:8080`);
         webSocket.onopen = () => console.log('WebSocket Connected');
         webSocket.onclose = () => console.log('WebSocket Disconnected');
         webSocket.onmessage = (message) => {

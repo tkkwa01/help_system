@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { WebSocketContext } from '../contexts/WebSocketContext'; // WebSocket接続を管理するコンテキスト
+import { WebSocketContext } from '@/contexts/WebSocketContext';
 
 const HelpRequestForm = () => {
     const [selectedIssue, setSelectedIssue] = useState('');
@@ -11,7 +11,6 @@ const HelpRequestForm = () => {
             const message = JSON.stringify({
                 type: 'help_request',
                 issue: selectedIssue,
-                // 席の番号や学生の識別情報もここに含めることができます
             });
             ws.send(message);
             console.log('Help request sent:', selectedIssue);

@@ -6,17 +6,17 @@ const HelpRequestsList = ({ websocket }) => {
     useEffect(() => {
         const onMessage = (event) => {
             const message = JSON.parse(event.data);
-            if (message.type === 'help_request') {
-                setRequests(prev => [...prev, message]);
-            }
+            // ここで`type`プロパティのチェックを削除し、直接リストに追加する
+            setRequests(prev => [...prev, { seatId: '不明', issue: message.issue }]);
         };
 
-        websocket.addEventListener('message', onMessage);
+        websocket && websocket.addEventListener('message', onMessage);
 
         return () => {
-            websocket.removeEventListener('message', onMessage);
+            websocket && websocket.removeEventListener('message', onMessage);
         };
     }, [websocket]);
+
 
     const handleResolve = (index) => {
         setRequests(prev => prev.filter((_, i) => i !== index));
