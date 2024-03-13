@@ -48,11 +48,11 @@ export default function HelpRequestForm() {
                     label="困っていること"
                     onChange={handleChange}
                 >
-                    <MenuItem value={10}>資料について質問がある</MenuItem>
-                    <MenuItem value={20}>課題について質問がある</MenuItem>
-                    <MenuItem value={30}>コマンドについて質問がある</MenuItem>
-                    <MenuItem value={40}>追いつけないので助けて欲しい</MenuItem>
-                    <MenuItem value={50}>パソコン自体の挙動がおかしい</MenuItem>
+                    <MenuItem value={1}>資料について質問がある</MenuItem>
+                    <MenuItem value={2}>課題について質問がある</MenuItem>
+                    <MenuItem value={3}>コマンドについて質問がある</MenuItem>
+                    <MenuItem value={4}>追いつけないので助けて欲しい</MenuItem>
+                    <MenuItem value={5}>パソコン自体の挙動がおかしい</MenuItem>
                 </Select>
             </FormControl>
         </div>

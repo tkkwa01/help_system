@@ -5,29 +5,28 @@ const SeatMap = () => {
     const [ws, setWs] = useState(null);
 
     useEffect(() => {
-        // WebSocket接続を開始
         const webSocket = new WebSocket(`ws://${location.hostname}:8080`);
-        setWs(webSocket);
 
         webSocket.onmessage = (event) => {
             try {
-                // サーバーからのメッセージを受信し、JSON形式であるか試みて解析
                 const message = JSON.parse(event.data);
-                // JSON形式の場合、席のハイライト状態を更新
-                updateSeatHighlight(message.seatNumber);
+                // 席のハイライトを解除する処理
+                if (message.type === 'remove_highlight') {
+                    updateSeatHighlight(message.seatNumber, false);
+                } else if (message.seatNumber) {
+                    // 席のハイライトを更新する処理
+                    updateSeatHighlight(message.seatNumber, true);
+                }
             } catch (error) {
                 console.error('Received message is not valid JSON:', error);
             }
         };
-
-        return () => {
-            webSocket.close();
-        };
+        return () => webSocket.close();
     }, []);
 
-    const updateSeatHighlight = (seatNumber) => {
-        setSeats((prevSeats) => prevSeats.map((highlighted, index) =>
-            index === seatNumber - 1 ? true : highlighted)); // 席番号は1から始まると想定
+    const updateSeatHighlight = (seatNumber, highlighted) => {
+        setSeats((prevSeats) => prevSeats.map((highlight, index) =>
+            index === seatNumber - 1 ? highlighted : highlight));
     };
 
     return (

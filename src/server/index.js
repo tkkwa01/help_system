@@ -3,23 +3,42 @@ const wss = new WebSocket.Server({ port: 8080, host: '0.0.0.0' });
 
 wss.on('connection', function connection(ws, req) {
     const ip = req.socket.remoteAddress;
-    console.log('A new client connected from:', ip);
+    const seatNumber = parseInt(ip.split('.').pop());
 
-    // ここでIPアドレスの下2桁を計算し、10を引くなどの処理を行う
+    console.log('A new client connected from:', ip, ' Seat number:', seatNumber);
 
     ws.on('message', function incoming(data) {
         console.log('Received: %s', data);
 
         try {
-            // 受信したデータをJavaScriptオブジェクトに変換
             const message = JSON.parse(data);
+            message.seatNumber = seatNumber;
 
-            // 受信したメッセージをそのまま全クライアントにブロードキャスト
             wss.clients.forEach(function each(client) {
                 if (client !== ws && client.readyState === WebSocket.OPEN) {
                     client.send(JSON.stringify(message));
                 }
             });
+        } catch (e) {
+            console.error('Error parsing message', e);
+        }
+    });
+});
+
+wss.on('connection', function connection(ws) {
+    ws.on('message', function incoming(data) {
+        console.log(`Received message: ${data}`);
+        try {
+            const message = JSON.parse(data);
+
+            if (message.type === 'resolve_help_request') {
+                console.log(`Resolving help request for seat: ${message.seatNumber}`);
+                wss.clients.forEach(function each(client) {
+                    if (client.readyState === WebSocket.OPEN) {
+                        client.send(JSON.stringify({ type: 'remove_highlight', seatNumber: message.seatNumber }));
+                    }
+                });
+            }
         } catch (e) {
             console.error('Error parsing message', e);
         }
