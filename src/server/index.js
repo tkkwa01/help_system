@@ -3,7 +3,7 @@ const wss = new WebSocket.Server({ port: 8080, host: '0.0.0.0' });
 
 wss.on('connection', function connection(ws, req) {
     const ip = req.socket.remoteAddress;
-    const seatNumber = parseInt(ip.split('.').pop());
+    const seatNumber = parseInt(ip.split('.').pop()) - 10;
 
     console.log('A new client connected from:', ip, ' Seat number:', seatNumber);
 
