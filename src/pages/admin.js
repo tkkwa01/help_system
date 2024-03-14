@@ -1,3 +1,4 @@
+//admin.js
 import React, { useState, useEffect } from 'react';
 import SeatMap from '../components/SeatMap';
 import HelpRequestsList from '../components/HelpRequestsList';
